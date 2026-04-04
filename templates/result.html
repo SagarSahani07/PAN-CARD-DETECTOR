@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAN Guard AI | Detection Result</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/result.css') }}">
+</head>
+<body>
+
+    <div class="background-blur blur1"></div>
+    <div class="background-blur blur2"></div>
+
+    <div class="result-container">
+
+        <div class="top-section">
+            <h1>Detection Result</h1>
+            <p>Your PAN card comparison analysis has been completed successfully.</p>
+        </div>
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <h3>Similarity Score</h3>
+                <div class="score-circle">
+                    <span>{{ similarity_score }}%</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <h3>Detection Status</h3>
+
+                {% if status == "No Tampering Detected" %}
+                    <div class="status-badge success">
+                        {{ status }}
+                    </div>
+                {% elif status == "Minor Changes Detected" %}
+                    <div class="status-badge warning">
+                        {{ status }}
+                    </div>
+                {% else %}
+                    <div class="status-badge danger">
+                        {{ status }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="stat-card">
+                <h3>Tampered Regions Found</h3>
+                <div class="region-box">
+                    {{ tampered_regions }}
+                </div>
+            </div>
+
+        </div>
+
+        <div class="images-grid">
+
+            <div class="image-card">
+                <h2>Original PAN Card</h2>
+                <img src="{{ url_for('static', filename='output/original_result.jpg') }}" alt="Original Result">
+            </div>
+
+            <div class="image-card">
+                <h2>Suspicious PAN Card</h2>
+                <img src="{{ url_for('static', filename='output/tampered_result.jpg') }}" alt="Tampered Result">
+            </div>
+
+            <div class="image-card full-width">
+                <h2>Difference Highlight Map</h2>
+                <img src="{{ url_for('static', filename='output/difference_result.jpg') }}" alt="Difference Result">
+            </div>
+
+        </div>
+
+        <div class="button-section">
+            <a href="/" class="back-btn">Analyze Another PAN Card</a>
+        </div>
+
+    </div>
+
+</body>
+</html>

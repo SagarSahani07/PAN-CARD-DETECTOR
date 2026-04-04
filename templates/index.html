@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAN Guard AI | PAN Card Tampering Detector</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+
+    <div class="background-blur blur1"></div>
+    <div class="background-blur blur2"></div>
+
+    <nav class="navbar">
+        <div class="logo">PAN Guard AI</div>
+
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#upload">Upload</a></li>
+            <li><a href="#features">Features</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Detect PAN Card Tampering Instantly with AI</h1>
+
+            <p>
+                Upload an original PAN card and a suspicious PAN card image to detect edits,
+                fraud, tampering, and suspicious modifications using AI-powered image comparison.
+            </p>
+
+            <a href="#upload" class="hero-btn">Start Detection</a>
+        </div>
+    </section>
+
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+
+        <section class="upload-section" id="upload">
+
+            <div class="upload-card">
+                <h2>Original PAN Card</h2>
+
+                <label class="drop-zone" for="originalImage">
+                    <img id="preview1" src="" alt="Original PAN Preview">
+
+                    <div class="upload-text" id="text1">
+                        <p>Drag & Drop Original PAN Card</p>
+                        <span>or click below to upload</span>
+                        <div class="upload-btn">Select Original PAN</div>
+                    </div>
+                </label>
+
+                <input 
+                    type="file" 
+                    id="originalImage" 
+                    name="original_image" 
+                    accept="image/*" 
+                    hidden 
+                    required
+                >
+            </div>
+
+            <div class="upload-card">
+                <h2>Suspicious PAN Card</h2>
+
+                <label class="drop-zone" for="tamperedImage">
+                    <img id="preview2" src="" alt="Tampered PAN Preview">
+
+                    <div class="upload-text" id="text2">
+                        <p>Drag & Drop Suspicious PAN Card</p>
+                        <span>or click below to upload</span>
+                        <div class="upload-btn">Select Suspicious PAN</div>
+                    </div>
+                </label>
+
+                <input 
+                    type="file" 
+                    id="tamperedImage" 
+                    name="tampered_image" 
+                    accept="image/*" 
+                    hidden 
+                    required
+                >
+            </div>
+
+        </section>
+
+        <div class="submit-container">
+            <button type="submit" class="analyze-btn">
+                Analyze PAN Card
+            </button>
+        </div>
+
+    </form>
+
+    <section class="features" id="features">
+
+        <div class="feature-box">
+            <h3>AI Comparison</h3>
+            <p>
+                Uses OpenCV and Structural Similarity Index (SSIM) to compare
+                original and suspicious PAN card images with high accuracy.
+            </p>
+        </div>
+
+        <div class="feature-box">
+            <h3>Tampering Detection</h3>
+            <p>
+                Automatically identifies modified text, photo changes,
+                number manipulation, and suspicious edits.
+            </p>
+        </div>
+
+        <div class="feature-box">
+            <h3>Difference Highlighting</h3>
+            <p>
+                Highlights tampered regions with bounding boxes and generates
+                a clear difference map for analysis.
+            </p>
+        </div>
+
+        <div class="feature-box">
+            <h3>Fast Processing</h3>
+            <p>
+                Get results instantly with similarity score, tampering status,
+                and processed images within seconds.
+            </p>
+        </div>
+
+    </section>
+
+    <script src="../static/js/script.js"></script>
+
+</body>
+</html>
