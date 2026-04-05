@@ -63,17 +63,17 @@
 
             <div class="image-card">
                 <h2>Original PAN Card</h2>
-                <img src="{{ url_for('static', filename='output/original_result.jpg') }}" alt="Original Result">
+                <img src="{{ url_for('static', filename=original_result) }}" alt="Original Result">
             </div>
 
             <div class="image-card">
                 <h2>Suspicious PAN Card</h2>
-                <img src="{{ url_for('static', filename='output/tampered_result.jpg') }}" alt="Tampered Result">
+                <img src="{{ url_for('static', filename=tampered_result) }}" alt="Tampered Result">
             </div>
 
             <div class="image-card full-width">
                 <h2>Difference Highlight Map</h2>
-                <img src="{{ url_for('static', filename='output/difference_result.jpg') }}" alt="Difference Result">
+                <img src="{{ url_for('static', filename=difference_result) }}" alt="Difference Result">
             </div>
 
         </div>
