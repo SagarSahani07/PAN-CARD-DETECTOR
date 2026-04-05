@@ -67,13 +67,14 @@ def upload():
     result = compare_images(original_path, tampered_path)
 
     return render_template(
-        'result.html',
-        similarity_score=result['similarity_score'],
-        status=result['status'],
-        original_result=result['original_result'],
-        tampered_result=result['tampered_result'],
-        difference_result=result['difference_result']
-    )
+    'result.html',
+    similarity_score=result['similarity_score'],
+    status=result['status'],
+    original_result=result['original_result'],
+    tampered_result=result['tampered_result'],
+    difference_result=result['difference_result'],
+    tampered_regions=result['tampered_regions']
+)
 
 # =========================
 # RUN APP

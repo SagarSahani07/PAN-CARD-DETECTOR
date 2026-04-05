@@ -17,11 +17,14 @@ def compare_images(original_path, tampered_path):
         }
 
     # Resize images to same size
-    width = 700
-    height = 500
+    h1, w1 = original.shape[:2]
+    h2, w2 = tampered.shape[:2]
 
-    original = cv2.resize(original, (width, height))
-    tampered = cv2.resize(tampered, (width, height))
+    new_width = min(w1, w2)
+    new_height = min(h1, h2)
+
+    original = cv2.resize(original, (new_width, new_height))
+    tampered = cv2.resize(tampered, (new_width, new_height))
 
     # Convert to grayscale
     original_gray = cv2.cvtColor(original, cv2.COLOR_BGR2GRAY)
@@ -52,7 +55,7 @@ def compare_images(original_path, tampered_path):
     for contour in contours:
         area = cv2.contourArea(contour)
 
-        if area > 40:
+        if area > 150:
             tampered_regions += 1
 
             x, y, w, h = cv2.boundingRect(contour)
