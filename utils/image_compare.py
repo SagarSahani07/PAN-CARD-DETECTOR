@@ -1,6 +1,7 @@
 import cv2
 import os
 import time
+import numpy as np
 from PIL import Image
 from skimage.metrics import structural_similarity
 
@@ -20,17 +21,9 @@ def compare_images(original_path, tampered_path):
     original = original.resize((250, 160))
     tampered = tampered.resize((250, 160))
 
-    # Temporary file paths
-    resized_original_path = os.path.join(output_folder, f"original_temp_{timestamp}.png")
-    resized_tampered_path = os.path.join(output_folder, f"tampered_temp_{timestamp}.png")
-
-    # Save resized images
-    original.save(resized_original_path)
-    tampered.save(resized_tampered_path)
-
-    # Read using OpenCV
-    original_cv = cv2.imread(resized_original_path)
-    tampered_cv = cv2.imread(resized_tampered_path)
+    # Convert PIL images directly to OpenCV format
+    original_cv = cv2.cvtColor(np.array(original), cv2.COLOR_RGB2BGR)
+    tampered_cv = cv2.cvtColor(np.array(tampered), cv2.COLOR_RGB2BGR)
 
     # Convert to grayscale
     original_gray = cv2.cvtColor(original_cv, cv2.COLOR_BGR2GRAY)
@@ -43,6 +36,9 @@ def compare_images(original_path, tampered_path):
     # Compute similarity
     score, diff = structural_similarity(original_gray, tampered_gray, full=True)
     similarity_percentage = round(score * 100, 2)
+
+    print("SSIM Score:", score)
+    print("Similarity Percentage:", similarity_percentage)
 
     # Convert diff image
     diff = (diff * 255).astype("uint8")
