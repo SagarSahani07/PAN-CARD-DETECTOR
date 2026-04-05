@@ -13,23 +13,16 @@ def compare_images(original_path, tampered_path):
 
     timestamp = str(int(time.time()))
 
-    # Open images with proper EXIF orientation
+    # Open images with correct EXIF orientation
     original = ImageOps.exif_transpose(Image.open(original_path)).convert("RGB")
     tampered = ImageOps.exif_transpose(Image.open(tampered_path)).convert("RGB")
 
     print("Original Size Before Resize:", original.size)
     print("Tampered Size Before Resize:", tampered.size)
 
-    # Crop whitespace if present
-    original = original.crop(original.getbbox())
-    tampered = tampered.crop(tampered.getbbox())
-
-    # Resize both images to same minimum dimensions
-    width = min(original.size[0], tampered.size[0])
-    height = min(original.size[1], tampered.size[1])
-
-    original = original.resize((width, height))
-    tampered = tampered.resize((width, height))
+    # Resize images to fixed PAN card dimensions
+    original = original.resize((500, 300))
+    tampered = tampered.resize((500, 300))
 
     print("Original Size After Resize:", original.size)
     print("Tampered Size After Resize:", tampered.size)
@@ -49,10 +42,10 @@ def compare_images(original_path, tampered_path):
     original_gray = cv2.GaussianBlur(original_gray, (5, 5), 0)
     tampered_gray = cv2.GaussianBlur(tampered_gray, (5, 5), 0)
 
-    # Compute similarity
+    # Compute SSIM
     score, diff = structural_similarity(original_gray, tampered_gray, full=True)
 
-    similarity_percentage = max(round(score * 100, 2), 1)
+    similarity_percentage = round(score * 100, 2)
 
     print("SSIM Raw Score:", score)
     print("Similarity Percentage:", similarity_percentage)
@@ -60,7 +53,7 @@ def compare_images(original_path, tampered_path):
     # Convert diff image
     diff = (diff * 255).astype("uint8")
 
-    # Threshold
+    # Threshold difference image
     thresh = cv2.threshold(
         diff,
         0,
@@ -104,7 +97,7 @@ def compare_images(original_path, tampered_path):
     tampered_result_path = os.path.join(output_folder, f"tampered_result_{timestamp}.jpg")
     difference_result_path = os.path.join(output_folder, f"difference_result_{timestamp}.jpg")
 
-    # Save result images
+    # Save output images
     cv2.imwrite(original_result_path, original_cv)
     cv2.imwrite(tampered_result_path, tampered_cv)
     cv2.imwrite(difference_result_path, thresh)
