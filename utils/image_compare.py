@@ -2,7 +2,7 @@ import cv2
 import os
 import time
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageOps
 from skimage.metrics import structural_similarity
 
 
@@ -13,17 +13,33 @@ def compare_images(original_path, tampered_path):
 
     timestamp = str(int(time.time()))
 
-    # Open images
-    original = Image.open(original_path).convert("RGB")
-    tampered = Image.open(tampered_path).convert("RGB")
+    # Open images with proper EXIF orientation
+    original = ImageOps.exif_transpose(Image.open(original_path)).convert("RGB")
+    tampered = ImageOps.exif_transpose(Image.open(tampered_path)).convert("RGB")
 
-    # Resize images to fixed PAN card dimensions
-    original = original.resize((250, 160))
-    tampered = tampered.resize((250, 160))
+    print("Original Size Before Resize:", original.size)
+    print("Tampered Size Before Resize:", tampered.size)
+
+    # Crop whitespace if present
+    original = original.crop(original.getbbox())
+    tampered = tampered.crop(tampered.getbbox())
+
+    # Resize both images to same minimum dimensions
+    width = min(original.size[0], tampered.size[0])
+    height = min(original.size[1], tampered.size[1])
+
+    original = original.resize((width, height))
+    tampered = tampered.resize((width, height))
+
+    print("Original Size After Resize:", original.size)
+    print("Tampered Size After Resize:", tampered.size)
 
     # Convert PIL images directly to OpenCV format
     original_cv = cv2.cvtColor(np.array(original), cv2.COLOR_RGB2BGR)
     tampered_cv = cv2.cvtColor(np.array(tampered), cv2.COLOR_RGB2BGR)
+
+    print("Original Shape:", original_cv.shape)
+    print("Tampered Shape:", tampered_cv.shape)
 
     # Convert to grayscale
     original_gray = cv2.cvtColor(original_cv, cv2.COLOR_BGR2GRAY)
@@ -35,9 +51,10 @@ def compare_images(original_path, tampered_path):
 
     # Compute similarity
     score, diff = structural_similarity(original_gray, tampered_gray, full=True)
-    similarity_percentage = round(score * 100, 2)
 
-    print("SSIM Score:", score)
+    similarity_percentage = max(round(score * 100, 2), 1)
+
+    print("SSIM Raw Score:", score)
     print("Similarity Percentage:", similarity_percentage)
 
     # Convert diff image
